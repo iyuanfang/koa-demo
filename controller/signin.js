@@ -1,4 +1,5 @@
 const router=require('koa-router')();
+const userService=require('../service/userService')
 
 router.get('/signin',async(ctx) =>{
     ctx.response.body = `<h1>User</h1>
@@ -14,8 +15,10 @@ router.post('/signin',async(ctx)=>{
     var name=ctx.request.body.name ||'';
     var password=ctx.request.body.password ||'';
     console.log(`signin with name:${name},password:${password}`);
-    if (name === 'koa' && password === '123456') {
-        ctx.response.body = `<h1>Welcome, ${name}!</h1>`;
+    var user=userService.getUser({name:name,password:password});
+    console.log("userget"+user.name);
+    if (user) {
+        ctx.response.body = `<h1>Welcome, ${user.name}!</h1>`;
     } else {
         ctx.response.body = `<h1>Login failed!</h1>
         <p><a href="/signin">重新登录</a></p>
