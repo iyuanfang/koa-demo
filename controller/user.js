@@ -3,7 +3,7 @@ const userService=require('../service/userService');
 
 //查询单个用户
 router.get('/user/:id',async(ctx)=>{
-    var id=ctx.params.id;
+    var id=parseInt(ctx.params.id);
     console.log('query user id:'+id);
     var user=await userService.getUser({userId:id});
     ctx.body=user;
@@ -21,15 +21,15 @@ router.get('/users',async(ctx)=>{
 })
 
 //删除用户
-router.get('/user/delete/:id',async(ctx)=>{
-    var id=ctx.params.id;
+router.delete('/user/:id',async(ctx)=>{
+    var id=parseInt(ctx.params.id);
     await userService.deleteUser(id);
     ctx.body='del user id:'+id;
     console.log('Delete user,id=' +id);
 })
 
 //更新用户
-router.put('/user/update',async(ctx)=>{    
+router.patch('/user',async(ctx)=>{    
     var userJson=ctx.request.body;    
     //update user
     const user=await userService.updateUser(userJson);
@@ -38,12 +38,17 @@ router.put('/user/update',async(ctx)=>{
 })
 
 ////创建用户
-router.post('/user/save',async(ctx)=>{
+router.put('/user',async(ctx)=>{
     var userJson=ctx.request.body;    
     //save user
-    const user=userService.saveUser(userJson);
-    ctx.body='注册成功';
-    console.log('Insert user,id='+user.userId+'name='+user.name+',password='+user.password);
+    const user=await userService.saveUser(userJson);
+    if(user!=null){
+        ctx.body='注册成功';
+        console.log('Insert user,id='+user.userId+'name='+user.name+',password='+user.password);
+    }else{
+        ctx.body='注册失败，可能原因：用户名重复';
+        console.log('注册失败');
+    }    
 })
 
 //用户表单

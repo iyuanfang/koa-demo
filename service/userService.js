@@ -17,7 +17,20 @@ exports.deleteUser=function(userId){
 
 exports.saveUser=function(user){
     console.log("save user:"+JSON.stringify(user));
-    return new User(user).save();
+    try{
+        var user=new User(user).save();
+        return user;
+    }catch(err){
+        console.log('err:'+err);
+        return null;
+    }
+    // var user=new User(user).save(function(err){
+    //     if(err){
+    //         console.log('err:'+err);
+    //         return null;
+    //     }
+    // });
+    // return user;
 }
 
 exports.updateUser=function(user){
