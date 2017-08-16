@@ -8,6 +8,7 @@ const UserSchema=Schema({
     password:String
 });
 
-const User=mongoose.model('user',UserSchema);
+//第三个参数才是指定创建的表名
+const User=mongoose.model('user',UserSchema,'user');
 
 module.exports=User;

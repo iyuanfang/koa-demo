@@ -4,6 +4,7 @@ const userService=require('../service/userService');
 //查询单个用户
 router.get('/user/:id',async(ctx)=>{
     var id=ctx.params.id;
+    console.log('query user id:'+id);
     var user=await userService.getUser({userId:id});
     ctx.body=user;
     console.log('Process user');
@@ -12,7 +13,9 @@ router.get('/user/:id',async(ctx)=>{
 
 //查询用户列表
 router.get('/users',async(ctx)=>{
-    users=await userService.getUsers({});
+    var query=ctx.request.query;
+    var namePattern=new RegExp("^.*"+query.name+".*$");
+    users=await userService.getUsers({name:namePattern});
     ctx.body=users;
     console.log('Process users');
 })
@@ -26,7 +29,7 @@ router.get('/user/delete/:id',async(ctx)=>{
 })
 
 //更新用户
-router.post('/user/update',async(ctx)=>{    
+router.put('/user/update',async(ctx)=>{    
     var userJson=ctx.request.body;    
     //update user
     const user=await userService.updateUser(userJson);

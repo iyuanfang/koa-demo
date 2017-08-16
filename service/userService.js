@@ -1,7 +1,9 @@
 const User=require('../model/user');
 
 exports.getUser=function(query){
-    return User.findOne(query).exec();
+    var user=User.findOne(query).exec();
+    console.log('get user:'+user[0]);
+    return user;
 }
 
 exports.getUsers=function(query){
